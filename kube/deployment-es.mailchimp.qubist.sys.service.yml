@@ -1,0 +1,58 @@
+# ... Deployment YAML definition   
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mailchimp
+  namespace: prc-nm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mailchimp
+  template:
+    metadata:
+      labels:
+        app: mailchimp
+    spec:
+      containers:
+        - env:
+          - name: POSTGRES_URL
+            valueFrom:
+              secretKeyRef:
+                name: mailchimp-secrets
+                key: spring.datasource.url
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: mailchimp-secrets
+                key: spring.datasource.username
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mailchimp-secrets
+                key: spring.datasource.password
+    spec:
+      nodeName: v06-k8smaster-main
+      containers:
+        - name: app
+          image: israelservinmachette/mailchimp-service:1.0.1
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Always
+
+          
+---
+# ... Service YAML definition
+apiVersion: v1
+kind: Service
+metadata:
+  name: mailchimp
+  namespace: prc-nm
+spec:
+  selector:
+    app: mailchimp
+  ports:
+    - port: 80
+      targetPort: 8080
+  type: LoadBalancer
+  loadBalancerIP: 95.179.189.132
