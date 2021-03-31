@@ -128,7 +128,7 @@ public class CampaignControllerTest {
        @Test
         public void testDeleteCampaign() throws Exception 
         {
-     	mockMvc.perform(delete("/response/deleteCampaign/4151069d27"))
+     	mockMvc.perform(delete("/response/deleteCampaign/f2db4d6c16"))
              .andExpect(status().isNoContent());
        }
       
@@ -136,7 +136,7 @@ public class CampaignControllerTest {
        @Test
         public void testSendCampaign() throws Exception 
         {
-     	mockMvc.perform(post("/response/sendCampaign/9ec64424d4"))
+     	mockMvc.perform(post("/response/sendCampaign/4fece34126"))
              .andExpect(status().isNoContent());
        }
        
